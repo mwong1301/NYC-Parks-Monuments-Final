@@ -8,3 +8,5 @@ Reasons for changes in OpenRefine: <br>
 - Mass Edit Installation
   - I was going to use this to figure out when art pieces were made to try to understand what type of period art is prominent throughout New York.
   - I changed it to just be years so that it'd be more streamlined and easier to tell rather than randome dates although there wasn't that much information anyways
+
+The Final File is the NYC_Park_Monuments(1).ipynb
