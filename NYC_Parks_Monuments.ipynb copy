@@ -1,0 +1,1355 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 30,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "nBJYk8FTlHKh",
+        "outputId": "d06a783d-80df-40b2-e688-fbd489a1cef5"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<bound method NDFrame.head of                           name Name2  number parkprop    borough  \\\n",
+              "0            Quinn, Matthew D.   NaN    1308        N     Queens   \n",
+              "1         Conway, Frank Tablet   NaN     327        N  the Bronx   \n",
+              "2                    Cigarette   NaN    1937        N  Manhattan   \n",
+              "3                   Philosophy   NaN    1181        O  Manhattan   \n",
+              "4           Giuseppe Garibaldi   NaN     571        Y  Manhattan   \n",
+              "...                        ...   ...     ...      ...        ...   \n",
+              "1873     Lincoln, Abraham Bust   NaN     915        N  Manhattan   \n",
+              "1874            Peace Form One   NaN     195        Y  Manhattan   \n",
+              "1875        Bernard S. Deutsch   NaN     384        Y  the Bronx   \n",
+              "1876       East Coast Memorial   NaN    1929        Y  Manhattan   \n",
+              "1877  Marble Hill War Memorial   NaN     972        N  Manhattan   \n",
+              "\n",
+              "                    parkname parknumber  commboard  council  \\\n",
+              "0                        NaN        NaN        0.0      0.0   \n",
+              "1                        NaN        NaN        0.0      0.0   \n",
+              "2                        NaN        NaN        5.0      3.0   \n",
+              "3                Bryant Park       M008        5.0      3.0   \n",
+              "4     Washington Square Park       M098        2.0      1.0   \n",
+              "...                      ...        ...        ...      ...   \n",
+              "1873                     NaN        NaN        9.0      7.0   \n",
+              "1874    Ralph J. Bunche Park      M203B        6.0      4.0   \n",
+              "1875       Henry Hudson Park       X080        8.0     11.0   \n",
+              "1876            Battery Park       M005        1.0      1.0   \n",
+              "1877                     NaN        NaN        8.0     10.0   \n",
+              "\n",
+              "                                               Location  ...  \\\n",
+              "0       LONG ISLAND CITY; academy st. near grand Avenue  ...   \n",
+              "1                                                   NaN  ...   \n",
+              "2         The Museum of Modern Art, 11 West 53rd Street  ...   \n",
+              "3      New York Public Library; 42nd St. and 5th Avenue  ...   \n",
+              "4                                                   NaN  ...   \n",
+              "...                                                 ...  ...   \n",
+              "1873  COLLEGE OF THE CITY OF NEW YORK; 137th to 140t...  ...   \n",
+              "1874                        First Avenue at 43rd Street  ...   \n",
+              "1875                                                NaN  ...   \n",
+              "1876         South end of park, east of Dewey Promenade  ...   \n",
+              "1877  ST.STEPHENS METH,EPISC,CH.1897; 228th st and m...  ...   \n",
+              "\n",
+              "                                 donor contractor MaintainedByParks  \\\n",
+              "0                           gift. $405        NaN               NaN   \n",
+              "1                                  NaN        NaN               NaN   \n",
+              "2                 Museum of Modern Art        NaN               NaN   \n",
+              "3                             purchase        NaN               NaN   \n",
+              "4                    Italian-Americans        NaN               Yes   \n",
+              "...                                ...        ...               ...   \n",
+              "1873     class of 1910; gutzom borglum        NaN               NaN   \n",
+              "1874                Phelps-Stokes Fund        NaN               Yes   \n",
+              "1875  Gift of Jewish American Congress        NaN               NaN   \n",
+              "1876                               NaN        NaN               Yes   \n",
+              "1877  marble hill honor roll committee        NaN               NaN   \n",
+              "\n",
+              "     Installation Rededication Cost                               Categories  \\\n",
+              "0             NaN          NaN  NaN                                      NaN   \n",
+              "1             NaN          NaN  NaN                                      NaN   \n",
+              "2             NaN          NaN  NaN                                      NaN   \n",
+              "3             NaN          NaN  NaN                                      NaN   \n",
+              "4             NaN          NaN  NaN                          Politcal Figure   \n",
+              "...           ...          ...  ...                                      ...   \n",
+              "1873          NaN          NaN  NaN                                      NaN   \n",
+              "1874          NaN          NaN  NaN  Sculpture, Public Servant, Civic Leader   \n",
+              "1875          NaN          NaN  NaN          Public Servant, Politcal Figure   \n",
+              "1876          NaN          NaN  NaN               War Memorial, World War II   \n",
+              "1877          NaN          NaN  NaN               War Memorial, World War II   \n",
+              "\n",
+              "     inscribed              X              Y  \n",
+              "0          NaN            NaN            NaN  \n",
+              "1          NaN            NaN            NaN  \n",
+              "2          NaN            NaN            NaN  \n",
+              "3          NaN            NaN            NaN  \n",
+              "4          NaN  985120.016293  205443.463835  \n",
+              "...        ...            ...            ...  \n",
+              "1873       NaN            NaN            NaN  \n",
+              "1874       NaN  992671.718381  212340.749253  \n",
+              "1875       NaN            NaN            NaN  \n",
+              "1876       NaN  979858.683639  195090.320499  \n",
+              "1877       NaN            NaN            NaN  \n",
+              "\n",
+              "[1878 rows x 31 columns]>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 30
+        }
+      ],
+      "source": [
+        "#read data from OpenRefine\n",
+        "import pandas as pd\n",
+        "\n",
+        "big_data_filepath = '/content/NYC-Parks-Monuments-cleaned.csv'\n",
+        "\n",
+        "monument_data = pd.read_csv(big_data_filepath)\n",
+        "\n",
+        "monument_data.head"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#getting the columns in the dataset\n",
+        "\n",
+        "monument_data.columns"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UUSl1D6AmHBm",
+        "outputId": "f3e9b418-afdb-4e6c-ed6f-19b5b5103752"
+      },
+      "execution_count": 31,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Index(['name', 'Name2', 'number', 'parkprop', 'borough', 'parkname',\n",
+              "       'parknumber', 'commboard', 'council', 'Location', 'extant', 'dedicated',\n",
+              "       'cast', 'descrip', 'dimen', 'sponsor', 'materials', 'foundry',\n",
+              "       'fabricator', 'sculptor', 'architect', 'donor', 'contractor',\n",
+              "       'MaintainedByParks', 'Installation', 'Rededication', 'Cost',\n",
+              "       'Categories', 'inscribed', 'X', 'Y'],\n",
+              "      dtype='object')"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 31
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Get data of the monuments in the boroughs\n",
+        "\n",
+        "monument_data.borough"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Q2_7jg2zmjgD",
+        "outputId": "6ddd5c6c-09ce-4a03-9eb2-8434c058bb44"
+      },
+      "execution_count": 32,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0          Queens\n",
+              "1       the Bronx\n",
+              "2       Manhattan\n",
+              "3       Manhattan\n",
+              "4       Manhattan\n",
+              "          ...    \n",
+              "1873    Manhattan\n",
+              "1874    Manhattan\n",
+              "1875    the Bronx\n",
+              "1876    Manhattan\n",
+              "1877    Manhattan\n",
+              "Name: borough, Length: 1878, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 32
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Get all the values of the boroughs\n",
+        "\n",
+        "monument_boroughs = monument_data.borough\n",
+        "\n",
+        "for borough in monument_boroughs.iteritems():\n",
+        "  print(borough[1])"
+      ],
+      "metadata": {
+        "id": "78c29YY2mx4D"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Get the count of the number of monuments in those boroughs, in ascending order\n",
+        "borough_count_ascend = monument_data.borough.value_counts(ascending = True)\n",
+        "borough_count_ascend\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "1uqr1WzRnRMW",
+        "outputId": "1b2bdb92-bc57-4005-e8c3-e4bbfebaecb5"
+      },
+      "execution_count": 44,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Staten Island     96\n",
+              "the Bronx        223\n",
+              "Queens           257\n",
+              "Brooklyn         354\n",
+              "Manhattan        944\n",
+              "Name: borough, dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 44
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "new_data = monument_data.borough.value_counts()\n",
+        "\n",
+        "new_data"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "GNvgTMqnz6ie",
+        "outputId": "abbb6cbb-e26a-451e-b62d-f6c6685b93d6"
+      },
+      "execution_count": 47,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Manhattan        944\n",
+              "Brooklyn         354\n",
+              "Queens           257\n",
+              "the Bronx        223\n",
+              "Staten Island     96\n",
+              "Name: borough, dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 47
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from matplotlib import pyplot as plt_boroughs\n",
+        "\n",
+        "new_data = monument_data.borough.value_counts()\n",
+        "\n",
+        "new_data\n",
+        "names_list = []\n",
+        "counts_list = []\n",
+        "\n",
+        "for values in new_data.iteritems():\n",
+        "  names = values[0]\n",
+        "  counts = values[1]\n",
+        "\n",
+        "  names_list.append(names)\n",
+        "  counts_list.append(counts)\n",
+        "\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "rgrOh-pZu9XM"
+      },
+      "execution_count": 50,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "names_list"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "eP3uFs6w0KIL",
+        "outputId": "cdec99be-ef64-4a4f-fdce-adaf0e83c13a"
+      },
+      "execution_count": 51,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['Manhattan', 'Brooklyn', 'Queens', 'the Bronx', 'Staten Island']"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 51
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "counts_list"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Npf3Pm-K0MeA",
+        "outputId": "25dcccf0-9e37-4df1-c291-632eca45af4e"
+      },
+      "execution_count": 52,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[944, 354, 257, 223, 96]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 52
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Creating a graph, plotting the data base on the density of monuments in each borough in New York\n",
+        "\n",
+        "from matplotlib import pyplot as plt_boroughs\n",
+        "\n",
+        "plt_boroughs.bar(names_list, counts_list)\n",
+        "plt_boroughs.style.use('seaborn')\n",
+        "plt_boroughs.title(\"Density of Monuments in each NYC Borough\")\n",
+        "plt_boroughs.xlabel(\"Names of the Boroughs\")\n",
+        "plt_boroughs.ylabel(\"Number of Monuments\")\n",
+        "plt_boroughs.savefig('Density of Monuments in each NYC Borough.png')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 376
+        },
+        "id": "KVPT8hhMn43J",
+        "outputId": "647ba8cd-8924-4cb2-f49f-d6d46d932ac8"
+      },
+      "execution_count": 63,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 576x396 with 1 Axes>"
+            ],
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAfIAAAFnCAYAAABdOssgAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAgAElEQVR4nO3de1yO9/8H8NfdfRdKK6UyhDRiDmHYHBKRSkwqp5SNbDNizhI5JKcZ2xCbOcePqJyGDo5zbGgzM8eGyUjng0qn6/dHj66vdLirdVdXXs/Hw+PRfV3Xfd3v63Pfrtf9+VzXfV0yQRAEEBERkSSpVXcBREREVHEMciIiIgljkBMREUkYg5yIiEjCGOREREQSxiAnIiKSMAY5qYSZmRmsra1hY2ODPn364IsvvsBvv/2mktf6448/4O7uDgCIi4vDqVOnKm3ds2bNgqWlJc6fP19oekREBMzMzLB79+4izxk4cCDc3NwqrYaqdPz4caSlpZV5+fDwcMybN0+FFZUuOjoa77//fpmWtbKywqefflrk+VZWVgCADRs2YPz48YXm5+TkYNCgQTh06BAAICsrC99++y1sbW1hY2MDGxsbfPvtt8jKyiq2NjMzM9ja2orLT506FUlJSRXY0srl6emJjRs3VncZVEkY5KQy/v7+CA0Nxblz5+Dg4IBJkybh6tWrlf46HTt2xNatWwHkB+zp06crbd3Hjh2Dv78/LCwsisx799138fPPPxea9scffxS7U5eKdevWlSvIra2tsWLFChVWVLn++ecfnDx5sth5n332WZH5u3fvRoMGDeDg4AAAmDNnDu7cuYP9+/cjNDQUAQEBuHPnTolfZuRyOUJCQhASEoLjx49DQ0MD69evr/wNo7cag5xUTiaTwc7ODjNmzMCaNWsA5PdsfH19YWNjAysrK/zwww/i8lZWVti3bx+cnZ3Ru3dvrFy5EkB+72j+/PmwsbGBtbU1PDw8kJaWhoiICFhbW+PWrVvw8fFBaGgopk+fDicnJ4SEhIjrPXPmDIYOHVqkvn///Rfu7u6wsbHB4MGDxd6Xm5sb8vLy4O7ujnPnzhV5nrGxMZKSkhAdHS1OO378OHr16iU+zsvLE3twtra28PT0RHp6urj+7du3Y/To0bCwsMCMGTMgCEKRXubrj4ODgzF16lTMnDkTffv2xbhx43Dt2jWMGjUKPXv2REBAAABAEARs2LABNjY26NevH3x9fZGbm1vq686bNw8PHz6Em5sbrl27hl9//RXDhg3DoEGDYGdnhxMnThRpg+DgYLGX6+npiXXr1mHcuHHo168fxo0bh4yMjCLPKe29/+233+Do6AhbW1sMGjQIly5dEucdOnRI7AXPnj270BemwMBADBkyBJaWlkW+XL1u1qxZWL16dbFfturUqYMFCxZg5cqVyMrKQkJCAn744QcsWrQIAHD//n2cO3cOq1atwjvvvAMA0NXVxfLly+Hs7FziaxaQy+Xo3r07njx5Ik7btWsXBg0aBFtbW3z55ZdISEgQ23LFihUYMmQITpw4gVevXmHhwoWwsbGBnZ0dVq5cKb6fZmZmeP78ubjOgsd5eXlYunQpevXqhdGjR2Pz5s2FRoqSk5Px2WefoW/fvnB3dy/XFziqWRjkVGWsrKxw48YNZGZm4qeffsKDBw9w9OhR/PzzzwgNDcWZM2fEZa9evYqAgAAEBQVh9+7deP78OS5cuIDo6GiEhIQgLCwM7733XqHh+nbt2sHV1VUc7hw8eHChnXp4eDjs7e2L1OXt7Y3u3bsjNDQUP/74I3x9fREdHQ1/f38A+SMLlpaWxW6Tra0tjh07BiA/PE+dOoV+/fqJ80+cOIFffvkFwcHBOHbsGFJSUrBjxw5x/unTp7F9+3aEhobiypUriIyMVNqO58+fh4eHB8LCwhAVFYUtW7Zgz549WLZsmThcevjwYYSEhCAwMBDh4eF48uQJ9u7dW+rrFvSs/f390bVrV6xatQrz5s3D8ePHsWnTphJ7sq8LCQnBt99+i/DwcCQkJCA8PLzIMqW99wsXLoS7uztCQkLw+eefiyEaHR2NVatWYdeuXQgJCUFGRgZ27doFIP/LUnZ2No4ePYp58+bhu+++K7G+jh07omPHjuJ7+6a+ffuiVatW2LZtG9auXQsHBwe0bt0aAPDrr7+iU6dO0NXVLfQcfX199OjRQ2nbpKWl4cSJE+JQ/u+//46tW7fC398fISEhaNy4sfhFFwAuX76MwMBA2NnZYefOnXj+/DmOHTuGgwcP4tq1a6V+YQGAc+fO4ZdffkFYWBg2bdqEgwcPFpp/8eJFrF69GidPnkR8fHyZ3l+qmRjkVGXq16+PvLw8vHz5EmfOnIGLiws0NDSgqamJoUOHIiwsTFx2yJAhkMvlMDIygr6+Pp49ewY9PT1ERUUhPDwcGRkZmDZtWrFD3gUGDRqE8+fPIzU1Fbm5uThz5gzs7OwKLZOdnY1Lly7BxcUFANCkSRN8+OGHuHLlSpm2yd7eXtyhXrt2Da1atYK2trY4/+zZs3BwcICmpibkcjkcHR1x8eJFcb6trS3q1q0LTU1NtGjRAs+ePVP6mu+99x5MTEygoaGB5s2bo3fv3pDL5WjdujVevHgBIH/0wcnJCdra2lAoFBg+fHih9i3L6+rr6+PQoUOIiopCixYtCoVMSSwtLaGrqwuFQoHWrVsXu97S3vtDhw6J79EHH3wg9l4vXryIzp07w8jICDKZDGvWrBFHAgRBEIe+33///UK90+LMmjUL27dvR3x8fLHz58+fj+3bt4tfmAokJydDX19faRu8Ljc3VxyNsbCwQGZmJvr37w8g/7NhY2MjrnP48OGFPhs9evRAnTp1xGVHjBgBhUKBunXrYsiQIYWWLc61a9fQt29faGlpQVdXt8iX2D59+ojvVatWrRATE1OubaOaQ1HdBdDbIzo6Gurq6tDW1kZqaipWrFiBtWvXAsgfbu3YsaO4bP369cW/5XI5cnNz0blzZyxYsAD+/v6YO3curKysxB5bcYyMjNCxY0eEhYWhWbNmaNKkCYyNjQstk5SUBEEQCoXvO++8Iw5xKtOqVSsAwL1793Ds2DEMGjSo0PyEhATo6OiIj3V0dAoFSHHbqYyWllah52hqaop/5+XlAQBSU1OxdetWcag9NzcXenp65Xrd5cuXY9OmTRg3bhzq1q2LGTNmwNbWttTaXm/HktZb2nt/9OhR7Nq1Cy9fvkReXh4KbgWRmJgoDmcDEAOu4HXq1asHAFBTUxPboCRGRkYYNWoUvvvuO3zxxRdF5jdt2hS9e/dG8+bNC7VTgwYNyh12BcfIC4SGhmLkyJE4fvw4EhISYGhoKM575513Cn02Xv/cKPscFSclJQVGRkbi49f/Bir22aOaiUFOVSY0NBTdu3eHhoYGDA0NMX78+ELD0GVR0LtJSkqCl5cXtm7dip49e5a4vL29PUJCQtC8efMiIQvk75zV1NSQnJws7iiTkpLK1fOyt7cXh9DnzJmDmzdvivMaNmxY6CzlpKQkNGzYsNT1FQSyIAiQyWRISUkpcy0FDA0NYWVlBVdX13I/t0DDhg3h7e0Nb29vXLhwAVOmTIGFhUWhLxIVUdJ7HxMTgwULFuDAgQNo27YtHj16BBsbGwD579Prh1HS0tKQmZlZ4Rrc3d1hb29f4iETdXV1KBSFd4/du3fHihUrEBMTUygUU1JSsH37dkydOhUymazU17WxsYGPjw/u3btXrs9GacuqqamJIZycnCwuU79+ffF8DACIjY0ttTaSLg6tk8oJgoCQkBDs3LkT06dPBwD0798fBw4cQG5uLgRBwMaNG/HLL7+Uup6goCD4+fkByD/JqGXLlkWWUSgUSE1NFR/b2tri+vXrCAkJKTKsXrB87969xZ7rP//8g2vXrpX65eBN9vb22L9/Pzp06CD2jgv07dsXR44cQUZGBnJychAYGFhieBRo0KAB5HI57t69CwDiyXfl0b9/fxw+fFg82Wzfvn1FjpEWR6FQICUlBdnZ2XBzcxOH6tu1aweFQgE1tf++yyjpvU9ISICmpiZatmyJnJwc8T15+fIlLC0tERkZiejoaAiCgEWLFiEwMLDCNdSrVw/Tpk3D6tWry/wcU1NTDBo0CDNmzEBcXByA/ECdMWMGEhMTlYY4AFy/fh3p6elo2rQp+vbti/DwcCQmJgLIf49K+mz07dsXgYGByM3NRXp6Og4fPiwua2BggDt37gDI/z9S8B516NABZ8+eRWZmJlJSUoo9WZFqB/bISWXc3Nwgl8uRlpYGU1NTbN68GR06dAAAuLi4IDo6Gvb29hAEAe3bt8cnn3xS6vr69+8PLy8vDBw4EHK5HM2bN8fKlSvFwAOAXr16Yfv27XByckJQUBB0dXXRrVs3JCcn49133y12vUuWLMGCBQsQHBwMdXV1+Pr6lrhscYyNjdGkSZNie/y2tra4e/cuHB0dIQgCPvzwQ4wdO7bU9dWtWxdTpkzBhAkTYGhoWKHfpA8YMAD379/HsGHDAADNmjXDsmXLlD7P1tYWo0aNgq+vL5ydncXj0GpqaliwYIE4hP1flPTea2pqok+fPuJxY09PT0RGRsLNzQ3BwcHw8fHBJ598Arlcjg4dOmDcuHH/qZc5ZMgQ7N69Wwzlsli6dCk2bdqEMWPGQCaTQV1dHR9//LF4HYM3FRwjL1C/fn1s3LgRenp60NPTw+eff44xY8YgLy8Pbdu2xeLFi4tdj5ubG548eQJ7e3vIZDLY2tqKX0ynT5+OxYsXY926dRg1apQ4ZG5tbY2zZ8/C1tYWzZs3h52dHS5fvlzmbSXpkPF+5FTbLV68GK1atcKYMWOquxSiKlVweAYA9uzZg0uXLomjWlR7cGidarVHjx7hl19+wccff1zdpRBVqdu3b6N///5ITk5GTk4OwsLC0KlTp+oui1SAQ+tUa33//fc4fPgwvL29C51NTfQ2aNu2LRwcHODo6Ai5XI5OnTr9p5Mfqebi0DoREZGEcWidiIhIwhjkREREEibJY+SxsanKF5KgBg00kZiYrnxBKjO2aeVie1Y+tmnlqq3taWBQ8nk+7JHXIAqFvLpLqHXYppWL7Vn52KaV621sTwY5ERGRhDHIiYiIJIxBTkREJGEMciIiIgljkBMREUkYg5yIiEjCGOREREQSxiAnIiKSMAY5ERGRhDHIiYiIJIxBTkREJGEMciIiIgmT5N3PKtv4laeru4QaZZunVXWXQEREZcQeORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEqZQ1YpfvnyJuXPnIjk5GdnZ2Zg8eTIMDAywePFiAICZmRmWLFkCANiyZQtCQkIgk8ng4eEBS0tLVZVFRERUq6gsyA8ePAgTExPMnDkTMTEx+OSTT2BgYAAvLy907NgRM2fOxLlz59CyZUscP34c+/btQ1paGlxcXNC7d2/I5XJVlUZERFRrqGxovUGDBkhKSgIApKSkQFdXF0+fPkXHjh0BAP369cPly5cREREBCwsLaGhoQE9PD02aNMGDBw9UVRYREVGtorIeub29PYKDg2FtbY2UlBRs2rQJPj4+4nx9fX3ExsZCV1cXenp64nQ9PT3ExsbCzMysxHU3aKAJhYI9dlUxMNCu7hIqVW3bnurG9qx8bNPK9ba1p8qC/PDhw2jcuDG2bt2KO3fuYPLkydDW/l/jCoJQ7PNKmv66xMT0SquTioqNTa3uEiqNgYF2rdqe6sb2rHxs08pVW9uztC8nKhtaj4yMRO/evQEAbdq0watXr5CYmCjOj4mJgaGhIQwNDREXF1dkOhERESmnsiBv3rw5bty4AQB4+vQptLS0YGpqimvXrgEAwsLCYGFhgY8++ghnz55FVlYWYmJi8OLFC7z33nuqKouIiKhWUdnQ+siRI+Hl5QVXV1fk5ORg8eLFMDAwwMKFC5GXlwdzc3P07NkTADBixAi4urpCJpNh8eLFUFPjz9uJiIjKQiaU5aB0DVPZxz/GrzxdqeuTum2eVtVdQqWprcfLqgvbs/KxTStXbW3PajlGTkRERKrHICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSRiDnIiISMIY5ERERBLGICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSRiDnIiISMIY5ERERBLGICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSRiDnIiISMIY5ERERBLGICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSRiDnIiISMKUBnl0dDSuX78OANi/fz+8vLwQFRWl8sKIiIhIOaVBPm/ePKirq+Ovv/7CgQMHYGNjA19f36qojYiIiJRQGuQymQwdO3ZEeHg4xowZA0tLSwiCUBW1ERERkRJKgzw9PR1//PEHQkND0adPH2RlZSElJaUqaiMiIiIllAb5+PHj4e3tjZEjR0JPTw/r16/HkCFDqqI2IiIiUkKhbAFBEHD48GHx8fTp0xEQEKDSooiIiKhsSgzyv/76C7du3cK2bduQkZEhTs/JyYGfnx9Gjx5dJQUSERFRyUoM8jp16iA+Ph6pqaniz8+A/JPf5syZUyXFERERUelKDHJTU1OYmprio48+QqdOnaqyJiIiIiojpcfIMzMzMXnyZCQnJxf62dmePXtUWhgREREppzTIFy1ahC+//BKNGzeuinqIiIioHJQGedOmTeHg4FAVtRAREVE5KQ1yCwsLBAQEoHv37lAo/re4sbGxSgsjIiIi5ZQG+a5duwAAP/74ozhNJpPh1KlTqquKiIiIykRpkJ8+fboq6iAiIqIKUHqJ1qdPn2Lq1Klwc3MDABw4cACPHj1SdV1ERERUBkqD3NvbG0OHDhV/etaiRQt4e3urvDAiIiJSTmmQZ2dno3///pDJZACAbt26qbwoIiIiKhulQQ4AKSkpYpDfv38fr169UmlRREREVDZKT3bz8PDAiBEjEBsbiyFDhiAxMRGrV68u08qPHDmCLVu2QKFQYOrUqTAzM8OcOXOQm5sLAwMDrF69GhoaGjhy5Ah27twJNTU1jBgxAsOHD//PG0ZERPQ2UBrkH374IQ4dOoR79+5BQ0MDJiYmqFOnjtIVJyYmws/PD0FBQUhPT8f69esRGhoKFxcX2NnZYe3atQgMDISDgwP8/PwQGBgIdXV1ODs7w9raGrq6upWygURERLWZ0iCPiYlBaGgoUlNTC11r3cPDo9TnXb58GT169ED9+vVRv359LF26FFZWVliyZAkAoF+/fti2bRtMTEzQoUMHaGtrAwC6dOmCyMhIWFlZ/ZftIiIieisoDfLPPvsM7dq1g5GRUblWHB0djczMTEycOBEpKSmYMmUKMjIyoKGhAQDQ19dHbGws4uLioKenJz5PT08PsbGx5dwMIiKit5PSINfV1cWKFSsqtPKkpCRs2LAB//77L8aOHVuoR//6368rafrrGjTQhEIhr1BNpJyBgXZ1l1Cpatv2VDe2Z+Vjm1aut609lQa5tbU1jhw5gs6dO0Mu/194Krsbmr6+Pjp37gyFQoFmzZpBS0sLcrkcmZmZqFu3LmJiYmBoaAhDQ0PExcWJz3vx4oXS+58nJqYrK5v+g9jY1OouodIYGGjXqu2pbmzPysc2rVy1tT1L+3Ki9Odnd+/ehbe3N1xdXTF69GiMHj0aLi4uSl+0d+/euHLlCvLy8pCYmIj09HT07NkToaGhAICwsDBYWFjA3NwcN2/eREpKCl6+fInIyEh07dq1HJtHRET09lLaI79x4wauXr0qHtsuKyMjI9jY2GDEiBEAgAULFqBDhw6YO3cuAgIC0LhxYzg4OEBdXR0zZ86Eu7s7ZDIZJk+eLJ74RkRERKVTGuTt27fHq1evyh3kADBq1CiMGjWq0LTt27cXWc7W1ha2trblXj8REdHbrkw/P7OysoKpqWmhY+R79uxRaWFERESknNIgnzhxYlXUQURERBWgNMhzc3Orog4iIiKqAKVBvnHjRvHv7OxsPHjwAF26dEGPHj1UWhgREREppzTI/f39Cz2Oj4/HmjVrVFYQERERlV2ZbmP6On19ffz999+qqIWIiIjKSWmPfPbs2eK9yAHg2bNnUFMrd/4TERGRCigN8p49e4p/y2Qy1K9fH7169VJpUURERFQ2SoN82LBhSE1NRVJSkjgtLi4OxsbGKi2MiIiIlFMa5L6+vggKCoKenp54ZzKZTIZTp06pvDgiIiIqndIgj4iIwJUrV1CnTp2qqIeIiIjKQelZa82bN2eIExER1VBKe+SNGjXCmDFj8MEHHxS61vpXX32l0sKIiIhIOaVBrqury6u4ERER1VBKg9zDwwPp6el4+PAhZDIZTExMUK9evaqojYiIiJRQGuQnT57E4sWL0ahRI+Tl5SEuLg5Lly6FpaVlVdRHREREpVAa5Fu2bMGRI0egp6cHIP/+5F999RWDnIiIqAZQeta6urq6GOIAYGRkBHV1dZUWRURERGWjtEeupaWFbdu2iZdqvXDhArS0tFReGBERESmnNMiXLVuG77//HkeOHIFMJoO5uTmWL19eFbURERGREkqDXF9fHz4+PlVRCxEREZVTiUE+duzYUp+4a9euSi+GiIiIyqfEIFdTU0NsbCz69esHOzs76OrqVmVdREREVAYlBvmOHTvw7NkzHDx4ELNnz0azZs3w8ccfo3///rz2OhERUQ1R6s/P3n33XUyaNAnHjx/HhAkTcOXKFdjZ2WHevHlVVR8RERGVQunvyAEgOTkZt2/fxl9//QUtLS20bNlS1XURERFRGZQ4tC4IAs6fP4+goCDcvHkTNjY2WLp0Kdq2bVuV9REREVEpSgxyS0tLaGlpwdraGqNGjYJCoUBaWhquXr0KAOjWrVuVFUlERETFKzHIe/bsCZlMhtjYWBw5cqTIfAY5ERFR9SsxyFeuXFmVdRAREVEFlOlkNyIiIqqZGOREREQSVmKQBwUFAQAOHDhQZcUQERFR+ZR4jHzTpk3Izs7Gzp07IZPJisx3dnZWaWFERESkXIlBPmfOHJw7dw6pqam4fv16kfkMciIioupXYpAPHDgQAwcORGhoKGxsbKqyJiIiIiojpfcj79SpE7y8vHDz5k3IZDJ06tQJ06ZNg56eXlXUR0RERKVQetb6okWL0K5dO6xduxbffPMNWrZsCS8vr6qojYiIiJRQ2iPPyMjAmDFjxMetW7fG6dOnVVoUERERlY3SHnlGRgZevHghPn7+/DmysrJUWhQRERGVjdIe+aRJk+Do6AgDAwMIgoCEhAQsW7asKmojIiIiJZQGed++fXHy5Ek8evQIAGBiYoI6deqoui4iIiIqA6VBDgB169ZFmzZtVF0LERERlROvtU5ERCRhSoNcEISqqIOIiIgqQGmQjx07tirqICIiogpQeoy8bdu2+P7779G5c2eoq6uL03v06KHSwoiIiEg5pUF++/ZtAMC1a9fEaTKZjEFORERUAygNcn9/fwD5x8qLu50pERERVR+lx8jv3LkDR0dH2NnZAQD8/Pxw48YNlRdGREREyikNch8fHyxfvhwGBgYAgEGDBmHFihUqL4yIiIiUUxrkCoWi0MVgTExMoFCU6ToyREREpGJlCvInT56Ix8fPnTtX5t+WZ2ZmYsCAAQgODsazZ8/g5uYGFxcXfPXVV+KNV44cOQInJycMHz4cBw4c+A+bQkRE9PZR2rWeO3cuJk2ahIcPH6JLly5o2rQpVq1aVaaVb9q0CTo6OgCAdevWwcXFBXZ2dli7di0CAwPh4OAAPz8/BAYGQl1dHc7OzrC2toauru5/2yoiIqK3hNIgNzMzw9GjR5GQkAANDQ3Ur1+/TCuOiorCgwcP0LdvXwBAREQElixZAgDo168ftm3bBhMTE3To0AHa2toAgC5duiAyMhJWVlYV3BwiIqK3i9Igf/DgAdavX48HDx5AJpOhdevW8PDwQMuWLUt93qpVq+Dt7Y1Dhw4ByL+vuYaGBgBAX18fsbGxiIuLg56envgcPT09xMbGKi26QQNNKBRypctRxRgYaFd3CZWqtm1PdWN7Vj62aeV629pTaZDPmTMHLi4umDp1KgDg+vXrmD17NoKCgkp8zqFDh9CpUycYGxsXO7+kY+xlPfaemJhepuWoYmJjU6u7hEpjYKBdq7anurE9Kx/btHLV1vYs7cuJ0iDX0tKCs7Oz+NjU1BShoaGlPufs2bN48uQJzp49i+fPn0NDQwOamprIzMxE3bp1ERMTA0NDQxgaGiIuLk583osXL9CpU6eybBMRERGhlLPW8/LykJeXhx49eiAsLAxpaWl4+fIlTp48iW7dupW60u+++w5BQUHYv38/hg8fjkmTJqFnz57iF4CwsDBYWFjA3NwcN2/eREpKCl6+fInIyEh07dq1creQiIioFiuxR/7+++9DJpMVO9ytUCgwceLEcr3QlClTMHfuXAQEBKBx48ZwcHCAuro6Zs6cCXd3d8hkMkyePFk88Y2IiIiUkwkSvOF4ZR//GL/ydKWuT+q2edaeXw3U1uNl1YXtWfnYppWrtrbnfzpGHhMTg9DQUKSmphbqnXt4eFROdURERFRhSq/s9tlnn+H27dvIzs5GTk6O+I+IiIiqn9Ieua6uLm+SQkREVEMpDXJra2scOXIEnTt3hlz+v4uwNG7cWKWFERERkXJKg/zu3bs4evRooeufy2QynD17VpV1ERERURkoDfIbN27g6tWr4uVViYiIqOZQerJb+/bt8erVq6qohYiIiMqpTD8/s7KygqmpaaFj5G9EfxYAABqFSURBVHv27FFpYURERKSc0iAv7xXciABeZOdNtekiO0RUsygN8tzc3Kqog4iIiCpAaZBv3LhR/Ds7OxsPHjxAly5d0KNHD5UWRkRERMopDXJ/f/9Cj+Pj47FmzRqVFURERERlp/Ss9Tfp6+vj77//VkUtREREVE5Ke+SzZ8+GTCYTHz979gxqauXOfyIiIlIBpUHes2dP8W+ZTIb69eujV69eKi2KiIiIykZpkA8bNqwq6iAiIqIKKDHIraysCg2pC4IAmUyGrKwsxMXF4fbt21VSIBEREZWsxCA/fbroBT1OnjyJNWvWwMnJSaVFERERUdkoHVoHgEePHsHX1xfq6urYvHkzjI2NVV0XERERlUGpQZ6eng4/Pz+cO3cOs2fPhqWlZVXVRURERGVQ4u/Ifv75Zzg6OkJHRwcHDx5kiBMREdVAJfbIZ82ahRYtWuD8+fO4cOGCOL3gpLddu3ZVSYFERERUshKD/NSpU1VZBxEREVVAiUHepEmTqqyDiIiIKoDXWiUiIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSRiDnIiISMIY5ERERBLGICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCSvx7mdEVHOMX3m6ukuoUbZ5WlV3CUQ1BnvkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjBeopWI3kq87G1hvOytdLFHTkREJGEMciIiIglT6dD6119/jevXryMnJwdffPEFOnTogDlz5iA3NxcGBgZYvXo1NDQ0cOTIEezcuRNqamoYMWIEhg8frsqyiIiIag2VBfmVK1dw//59BAQEIDExEcOGDUOPHj3g4uICOzs7rF27FoGBgXBwcICfnx8CAwOhrq4OZ2dnWFtbQ1dXV1WlERER1RoqG1rv1q0bvv/+ewDAO++8g4yMDERERKB///4AgH79+uHy5cu4ceMGOnToAG1tbdStWxddunRBZGSkqsoiIiKqVVTWI5fL5dDU1AQABAYGok+fPrhw4QI0NDQAAPr6+oiNjUVcXBz09PTE5+np6SE2NrbUdTdooAmFQq6q0t96Bgba1V1CrcM2rVxsz8pXm9q0Nm1LWaj852cnT55EYGAgtm3bhoEDB4rTBUEodvmSpr8uMTG90uqjomJjU6u7hFqHbVq52J6Vr7a0qYGBdq3ZlteV9uVEpWetnz9/Hj/88AN++uknaGtrQ1NTE5mZmQCAmJgYGBoawtDQEHFxceJzXrx4AUNDQ1WWRUREVGuoLMhTU1Px9ddf48cffxRPXOvZsydCQ0MBAGFhYbCwsIC5uTlu3ryJlJQUvHz5EpGRkejatauqyiIiIqpVVDa0fvz4cSQmJmLatGnitJUrV2LBggUICAhA48aN4eDgAHV1dcycORPu7u6QyWSYPHkytLXfruMbREREFaWyIB85ciRGjhxZZPr27duLTLO1tYWtra2qSiEiIqq1eGU3IiIiCWOQExERSRiDnIiISMIY5ERERBLGICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSRiDnIiISMIY5ERERBLGICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSRiDnIiISMIY5ERERBLGICciIpIwBjkREZGEMciJiIgkjEFOREQkYQxyIiIiCWOQExERSZiiugsgIqLaYfzK09VdQo2xzdOqyl6LPXIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhDHIiIiIJY5ATERFJGIOciIhIwhjkREREEsYgJyIikjAGORERkYQxyImIiCSMQU5ERCRhiuouoMDy5ctx48YNyGQyeHl5oWPHjtVdEhERUY1XI4L8119/xePHjxEQEICoqCh4eXkhICCgussiIiKq8WrE0Prly5cx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\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Mean of monuments\n",
+        "\n",
+        "borough_count_ascend.skew()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rU1XhWMheWeV",
+        "outputId": "73b3af40-e9c5-4209-ff57-6c395061eb59"
+      },
+      "execution_count": 125,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "1.8056677492102406"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 125
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "monument_count = borough_count_ascend\n",
+        "print(monument_count.describe())\n",
+        "#average amount of monuments per burough is ~ 375 monuments\n",
+        "#skewed to the right. Meaning that most of the buroughs have less than 375 monuments."
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "sN4igLkefElP",
+        "outputId": "dc06ea25-d2cd-44b3-f213-8aeb0a2effe2"
+      },
+      "execution_count": 124,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "count      5.000000\n",
+            "mean     374.800000\n",
+            "std      331.312089\n",
+            "min       96.000000\n",
+            "25%      223.000000\n",
+            "50%      257.000000\n",
+            "75%      354.000000\n",
+            "max      944.000000\n",
+            "Name: borough, dtype: float64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Next Graph: Extant within boroughs\n",
+        "\n",
+        "monument_data.extant\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "b357tI4_DBUU",
+        "outputId": "5cad1e3f-6dfb-466f-decf-ecd428c43f92"
+      },
+      "execution_count": 65,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0       Yes\n",
+              "1         M\n",
+              "2       Yes\n",
+              "3       Yes\n",
+              "4       Yes\n",
+              "       ... \n",
+              "1873    Yes\n",
+              "1874    Yes\n",
+              "1875      M\n",
+              "1876    Yes\n",
+              "1877      N\n",
+              "Name: extant, Length: 1878, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 65
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Categorize based on response\n",
+        "monument_extant = monument_data.extant\n",
+        "\n",
+        "for extant in monument_extant.iteritems():\n",
+        "  print(extant[1])"
+      ],
+      "metadata": {
+        "id": "TmYpBNDvMW5P"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "extant_categorized = monument_data.extant.value_counts()\n",
+        "extant_categorized"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "KvBFpjMSMofz",
+        "outputId": "e47a9a66-a06b-4e6c-b029-548f43a86cff"
+      },
+      "execution_count": 101,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Yes        1475\n",
+              "M           196\n",
+              "N           139\n",
+              "Storage      41\n",
+              "Lost         17\n",
+              "NM            1\n",
+              "Name: extant, dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 101
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Graph of extant\n",
+        "from matplotlib import pyplot as plt_extant\n",
+        "\n",
+        "#initialize empty lists for plotting\n",
+        "extant_list = []\n",
+        "data_list = []\n",
+        "#iterate over data and put data into parallel lists\n",
+        "for item in extant_categorized.iteritems():\n",
+        "  extant = item[0]\n",
+        "  extant_list.append(extant)\n",
+        "  data = item[1]\n",
+        "  data_list.append(data)\n",
+        "\n",
+        "#create and style a plot for output\n",
+        "plt_extant.style.use('seaborn')\n",
+        "plt_extant.bar(extant_list, data_list)\n",
+        "plt_extant.title(\"Extant Monuments in NYC\")\n",
+        "plt_extant.xlabel(\"Type of extant\")\n",
+        "plt_extant.ylabel(\"Number of type of extant\")\n",
+        "plt_extant.xticks(rotation=0, size=10)\n",
+        "plt_extant.tight_layout()\n",
+        "plt_boroughs.savefig('Extant Monuments in NYC.png')\n",
+        "#plt_extant.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 405
+        },
+        "id": "UVc7fjy_ZePB",
+        "outputId": "1e6c133c-e344-4deb-b2d5-aab09958c504"
+      },
+      "execution_count": 117,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 576x396 with 1 Axes>"
+            ],
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAjgAAAGECAYAAAA7lVplAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAgAElEQVR4nO3deXxNd+L/8fdNbiITYkmaq6Vamn5LxxKCqq3WVDBGagmJWEpnqqJqmqldKWorqlW0ZSyNtY1SW8VQtP2KaEVVDe1oS61ZSAQhiTi/P/x6v02JW7mSKyev5+Ph8XDPueec9/k8hLezWgzDMAQAAGAibq4OAAAAcLdRcAAAgOlQcAAAgOlQcAAAgOlQcAAAgOlQcAAAgOlQcIBipHr16goODlZISEieX99+++1tl/vwww+d3nZ+6/j4449VvXp17dixI8/0q1evKigoSCNGjHB6265wp2O2bNkyzZ49+46WmTNnjmrVqqVffvklz/TevXsrISFBx44dU/369XXixIk88+fPn68+ffrYP+/atUs9evRQu3bt1KZNG73wwgv68ccf7ygLYDYUHKCYiYmJ0ZYtW/L8qlOnTr7fz83N1fTp053aZkpKihYuXJjv/AceeEAbN27MM23Hjh0qW7asU9t1lYKMWWRkpIYOHXrH27LZbJo2bdot51WtWlWRkZGaOnWqfVpSUpIWLVqkcePGSZJ27typ0aNHa9iwYYqLi9O2bdvUsmVLRURE6Ny5c3ecBzALCg5gEosWLdLAgQPtn/v376/ly5fr2Wef1cWLFxUSEqITJ07op59+Unh4uNq3b6/g4OA8xaR69epat26dQkND1axZMy1ZskSS1LNnT50+fVohISHKzs6+adtBQUFKSEjQlStX7NM2b96spk2b2j9nZWXp1VdfVbt27dS+fXtNnTpVubm5kqTWrVtr1apV6tatm5o1a2b/Bz0hIUHBwcH2dfz285w5czRu3Dg9//zzatasmV555RXt2LFDXbp0UbNmzexHlLKzszVp0iS1a9dOrVu31rvvvmtfX37b/f2Yffrpp/rLX/6i9u3bq1OnTkpISLhpDObMmaPRo0dLunEEZvHixQoPD1fz5s318ssvK79nqv71r3/ViRMntGfPnlvOHzhwoA4fPqzdu3dLkqZPn64ePXooICDAvt0XX3xR9evXlyRZLBb16NFD06ZNU6lSpW65TqAkoOAAJtG3b18lJyfryy+/1LZt23T58mWFh4dr8uTJcnd315YtW1SlShVNnz5drVq10qeffqrJkydr9OjRysnJsa/n6NGjWrdunebNm6dZs2YpNzdXkydP1gMPPKAtW7bI09Pzpm17enqqcePG2r59uyTp0qVLOnz4sOrVq2f/ztKlS3X27Flt2rRJa9eu1ddff52nXH311VdavXq11qxZo2XLluns2bMO93nnzp2aPHmyNmzYoC1btujzzz/Xxx9/rIEDB2rBggWSpAULFujo0aPasGGDNm7cqLi4uDyn02613d+P2Wuvvab33ntPn376qcaNG6fPPvvMYbbPPvtMixcvVlxcnPbs2aPExMRbfs/d3V0jR47U5MmT7YXvt/70pz9p5MiRev3115WQkKDExEQNGjRIkpSZmalDhw6pZcuWNy3XsmVLlSlTxmFOwKwoOEAx07t37zzX30REREi68Q/lxIkTNW3aNM2cOVMTJ06Um9vNP+Lz5s3TgAEDJEn169dXVlaWUlJS7PM7d+4sSapZs6aysrL+8GmOjh072gvLtm3b1KpVqzzb37lzp8LCwmS1WuXl5aVOnTrpf//3f+3zO3XqJHd3d1WsWFF+fn46c+aMw23Wq1dPfn5+qlChgvz9/fXUU09Jkh577DElJydLunGqLCIiQp6envL29lbnzp21devWO9qun5+fVq1apVOnTqlBgwYaOXKkw2whISHy8vKSt7e3qlatetv9ady4sSpXrqyPPvrolvODg4NVqVIlDRw4UCNHjpS3t7ckKSMjQ4ZhyM/Pz2EeoKSxujoAgDsTExOj+++//5bzatasqdKlS8vd3V2PPfbYLb/zxRdfaP78+UpLS5PFYpFhGLp+/bp9vo+Pj6QbhUlSnnm307RpU40ZM0bp6enatGmTBg0apJ9//tk+//z58ypXrpz9c7ly5fKUp98ebXB3d7/l0YzfK126dJ5lfv2H383NzZ774sWLmjJlimbNmiXpximr316z9Ee2O3/+fM2fP19dunTRAw88oFGjRumJJ564bbY73Z/hw4erT58+6tix4y3n9+vXT0ePHtXTTz9tn1auXDm5ubkpKSlJlStXvu36gZKGggOYyM6dO2W1WpWVlaVdu3apRYsWeebn5ORo6NChmj17tlq0aHHTP/bO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uGfvogoKClLNmjXVs2dPWSwWjRs3ztWRAABAMXHPXmQMAABQUPfsKSoAAICCouAAAADToeDcI+bNm6dZs2bZP1+/fl2dO3fWkSNHXJiqeDt58qSqV6+ub775Js/0rl27asSIES5KVXycPHlSjz/+eJ4/gx9//LE+/vhjF6ZyjeXLlyssLEyRkZHq1q2bdu/erSNHjujnn392dTRTOHnypLp06VLg5bds2XIX0xRPt/t5bd26td5///083582bZpatzb3O7YoOPeI/v37Ky4uTklJSZKkNWvWKDAwUDVq1HBxsuKtSpUq2rhxo/3z8ePHlZGR4cJExcujjz6qmTNnujqGS508eVIffvihli9frmXLlmnGjBmaN2+e/v3vf+vYsWOujlfiZWdna8mSJa6OcU/I7+fV399f27dvt382DEPfffddUUZziXv2LqqSxsvLS4MGDdLs2bP16quvatGiRfrXv/6l5557Tjk5OXJ3d9ekSZNUqVIlTZo0Sd99951yc3MVHh7u1P98zC4wMFC7d+9Wbm6u3N3dtWnTJjVt2lRXr151dbRioWbNmrpy5Yri4+PVuHFjV8dxiUuXLikrK0s5OTny8PBQ1apVNXbsWPXv31++vr7y8/PTlStX9Oabb8pqtapixYqaMmWKNm7cqM8//1zJycl68803tWjRIn377bfKyspSeHi4unfvriNHjmjEiBHy8fFRrVq1lJaWpqlTp2r58uXasGGD3Nzc1LZtW/Xv39/Vw1Dkvv/+e02YMEFubm4qXbq0pk6dKnd3dw0dOlTZ2dnKzs7Wq6++qtjYWH3//fcaP368xo8f7+rYLpXfz6unp6dKly6to0eP6tFHH9W+ffsUEBCgU6dOuTBt4eMIzj3kr3/9q3788UeNGTNGzzzzjN555x31799fS5cuVd++fTVv3jylp6dr586dWrVqlVasWKFr1665OvY9zcPDQ4GBgUpISJAkbd++XS1atHBxquLlH//4h2bPnl1inyZeo0YN1alTR23atNGIESO0efNmBQQEqHnz5nr55ZdVp04djRs3Tm+++aaWLVumcuXKacOGDZKkM2fOaPny5SpfvrwqV66slStXasWKFXrrrbckSXPnzlVUVJRiYmJ0+vRpSdKJEye0ZcsWrVy5UsuXL9fWrVvt80qS119/XcOGDVNMTIwaNmyoDz74QPHx8apYsaJiYmI0Y8YMnTt3TgMGDFC1atVKfLn5VX4/r+3atbP/udy8ebOefvppV8QrUhSce4jFYtE//vEPJSQkqF+/ftq/f7/mzJmj3r1767333lN6errKly+vqlWr6oUXXtDmzZsVGhrq6tj3vJCQEG3cuFE//PCDKlasKG9vb1dHKlaqVq2qP//5z9q8ebOro7jM9OnTtWzZMtWoUUMLFy7Us88+a/8HJD09XRaLRQ888IAkqVGjRjp8+LAkqXbt2rJYLCpVqpQuXLignj176m9/+5vS0tIkST/++KOCgoIkyX49xMGDB3X8+HH16dNHffr00eXLl03/P+1b+fHHHxUYGCjpxpj+5z//Ud26dfXNN9/o1Vdf1fHjx/XUU0+5OOW9J7+f1zZt2ujf//63cnNztXfvXj3xxBMuSlh0OEV1j6lSpYpsNps8PT3l4eGht956SzabLc93Fi5cqEOHDmnjxo365JNPtGjRIhelLR4aN26sCRMmyN/fX+3atXN1nGIpKipKAwYMUK9evWS1lqy/NgzDUHZ2tgICAhQQEKDevXurffv29vkWiyXP/5ZzcnJksVgk3TiCKEl79+7Vnj17FBMTIw8PD9WrV8++7l+/+9tlWrZsqQkTJhTJ/hUHOTk5cnNzk81m0yeffKKEhAStXLlS33zzDf/Ju4Vb/byWLVtWDz74oJYsWaLAwMAS8XPMEZx7WGBgoLZt2yZJio+P14YNG3Ty5El98MEHqlmzpoYPH6709HQXp7z3eXp6qmHDhlqzZo3p7xooLPfdd5/atm2rVatWuTpKkYuNjdXYsWPtJebixYu6fv26HnzwQeXm5qpcuXKyWCz200h79+5VrVq18qwjLS1N999/vzw8PLR9+3bl5uYqOztbDz30kP1iz88//1zSjesoEhISdOXKFRmGoUmTJpXIa8b+53/+R/v375ckffXVV6pVq5Z2796t3bt3q1mzZho7dqy+++47ubm5KTc318Vp7y35/byGhITo/fffLxGnpySO4NzTBg8erFGjRmnTpk2yWCyaMmWKbDab9u/fr82bN8vDw0Ndu3Z1dcxiISQkROfPn5ePj4+roxRb/fv318qVK10do8h16dJFP/30k7p37y5vb29du3ZNY8aM0blz5zRp0iSVLl1aEydOVHR0tKxWq6pUqaKOHTtq/fr19nU0adJECxYsUGRkpNq2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\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "One of the main problems with this code is that the key to what the extant of the monument is unclear. The definition provided was \"Denotes whether monument exists or not (i.e. Was stolen, broken etc.)\" but it's unclear as to what the letters means. For Y and S and L I guessed based on some of the findings about the monument within the extant."
+      ],
+      "metadata": {
+        "id": "HPC-2N3CM3W2"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#grouping of borough and extant\n",
+        "\n",
+        "extant_borough = monument_data.groupby('borough')['extant']\n",
+        "\n",
+        "for extant_in_borough in extant_borough:\n",
+        "  print(extant_in_borough)"
+      ],
+      "metadata": {
+        "id": "9DXxLRKZM22l"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Grouping by borough\n",
+        "\n",
+        "for item in extant_borough:\n",
+        "  borough = item[0]\n",
+        "  extant = item[1].tolist()\n",
+        "  print(f'{borough}:{extant}')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3LVc-ZK2Oezx",
+        "outputId": "ebc4d69b-2887-4434-c6e7-aa0e07016a23"
+      },
+      "execution_count": 83,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Brooklyn:['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'N', 'M', 'N', 'Yes', 'Storage', 'N', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'N', 'Yes', 'Yes', 'Storage', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Lost', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'M', 'Yes', 'N', 'Yes', 'N', 'N', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', nan, 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'N', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'M', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'N', 'N', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'N', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Lost', 'M', 'Storage', 'Yes', 'M', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Lost', 'Yes', 'Lost', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'N', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', nan, 'Yes', 'Yes', nan, 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'M', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes']\n",
+            "Manhattan:['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Storage', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'N', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'N', 'Storage', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Storage', 'Yes', 'M', 'M', 'Yes', 'N', 'Yes', 'Storage', 'M', 'M', 'Storage', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'N', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', nan, 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Lost', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'M', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'N', 'M', 'Yes', 'Yes', 'M', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'M', 'M', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Lost', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'M', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'NM', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Storage', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'N', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'N', 'Yes', 'Yes', 'Yes', 'M', 'M', 'N', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'N', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Lost', 'Yes', 'M', 'Yes', 'Yes', 'Lost', 'Yes', 'Yes', 'N', 'Yes', 'M', 'N', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'N', 'N', 'Yes', 'Storage', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'M', 'N', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'N', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N']\n",
+            "Queens:['Yes', 'M', 'N', 'Yes', 'M', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'N', 'Yes', 'N', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Lost', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'M', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', nan, 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'M', 'M', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'N', 'Yes', 'M', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'N', 'Yes', 'N', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'N', 'Yes', 'Yes', 'N', 'M', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'M', 'M', 'Yes', 'N', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'M', 'N']\n",
+            "Staten Island:['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'N', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'M', 'N', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'M', nan, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes']\n",
+            "the Bronx:['M', 'Yes', 'M', 'Yes', 'Yes', 'N', 'Yes', 'N', 'M', 'N', 'N', 'Yes', 'N', 'M', 'Yes', 'Yes', 'Yes', 'N', 'Yes', nan, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'N', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'N', 'M', 'Yes', 'Yes', 'N', 'M', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'M', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'M', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'N', 'M', 'Yes', 'Yes', 'Yes', 'M', 'Lost', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'Yes', 'Storage', 'Yes', 'Yes', 'Yes', 'N', 'M', 'Yes', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'N', 'Yes', 'Yes', 'M', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'M', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'N', 'M', 'N', 'N', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Storage', 'Yes', 'M', 'Yes', 'Yes', 'Yes', 'Yes', 'M']\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Getting counts for extants\n",
+        "\n",
+        "for item in extant_borough:\n",
+        "  borough = item[0]\n",
+        "  extant = item[1].unique().tolist()\n",
+        "  counts = item[1].value_counts().tolist()\n",
+        "  print(f'{borough}:{extant}:{counts}')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "7Av-juRQPw7E",
+        "outputId": "493cd94c-c1fc-4890-dd45-d44db7ffe69f"
+      },
+      "execution_count": 86,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Brooklyn:['Yes', 'Storage', 'M', 'N', 'Lost', nan]:[271, 33, 31, 10, 6]\n",
+            "Manhattan:['Yes', 'M', 'Storage', 'N', 'Lost', nan, 'NM']:[765, 84, 64, 20, 9, 1]\n",
+            "Queens:['Yes', 'M', 'N', 'Storage', 'Lost', nan]:[197, 34, 16, 8, 1]\n",
+            "Staten Island:['Yes', 'M', 'N', nan]:[77, 14, 4]\n",
+            "the Bronx:['M', 'Yes', 'N', nan, 'Storage', 'Lost']:[164, 30, 24, 3, 1]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "extant_list"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "KWEXaei11ut4",
+        "outputId": "f0281753-f23c-4ab3-e0fb-103ee21615a4"
+      },
+      "execution_count": 198,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['Yes', 'M', 'N', 'Storage', 'Lost', 'NM']"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 198
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "names_list"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "pD1b3bj91w3G",
+        "outputId": "4e57e958-8fc2-4d93-9dbd-80bb6f1a11b3"
+      },
+      "execution_count": 204,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['Manhattan',\n",
+              " 'Brooklyn',\n",
+              " 'Queens',\n",
+              " 'the Bronx',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island',\n",
+              " 'Staten Island']"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 204
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Percentage still have left\n",
+        "#1878 rows / monuments\n",
+        "extant_categorized = monument_data.extant.value_counts()\n",
+        "extant_categorized\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "xdIT-Y378UWG",
+        "outputId": "1b0a7add-3b93-4314-9341-bd19fe324cbe"
+      },
+      "execution_count": 229,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Yes        1475\n",
+              "M           196\n",
+              "N           139\n",
+              "Storage      41\n",
+              "Lost         17\n",
+              "NM            1\n",
+              "Name: extant, dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 229
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#pie chart\n",
+        "import matplotlib.pyplot as plt\n",
+        "import numpy as np\n",
+        "\n",
+        "values = np.array([1475,196,139,41,17,1])\n",
+        "mylabels = [ \"Yes\", \"M\", \"N\", \"Storage\", \"Lost\", \"NM\"]\n",
+        "\n",
+        "plt.pie(values, labels = mylabels)\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 330
+        },
+        "id": "_4AJOcpN-Gm4",
+        "outputId": "23c4abf5-feda-48bd-a638-ea3fc690d2b4"
+      },
+      "execution_count": 237,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 576x396 with 1 Axes>"
+            ],
+            "image/png": "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\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "big_data_filepath = '/content/NYC-Parks-Monuments-intallation.csv'\n",
+        "\n",
+        "install_monument_data = pd.read_csv(big_data_filepath)\n",
+        "\n",
+        "install_monument_data.head"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "5vczvvvKg-1k",
+        "outputId": "5c74c645-061c-4596-94f4-41d287c4f1c5"
+      },
+      "execution_count": 173,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<bound method NDFrame.head of                           name Name2  Installation  number parkprop  \\\n",
+              "0            Quinn, Matthew D.   NaN           NaN    1308        N   \n",
+              "1         Conway, Frank Tablet   NaN           NaN     327        N   \n",
+              "2                    Cigarette   NaN           NaN    1937        N   \n",
+              "3                   Philosophy   NaN           NaN    1181        O   \n",
+              "4                O'Connor Park   NaN           NaN    1125        Y   \n",
+              "...                        ...   ...           ...     ...      ...   \n",
+              "1830     Lincoln, Abraham Bust   NaN           NaN     915        N   \n",
+              "1831            Peace Form One   NaN           NaN     195        Y   \n",
+              "1832        Bernard S. Deutsch   NaN           NaN     384        Y   \n",
+              "1833       East Coast Memorial   NaN           NaN    1929        Y   \n",
+              "1834  Marble Hill War Memorial   NaN           NaN     972        N   \n",
+              "\n",
+              "        borough                   parkname parknumber  commboard  council  \\\n",
+              "0        Queens                        NaN        NaN        0.0      0.0   \n",
+              "1     the Bronx                        NaN        NaN        0.0      0.0   \n",
+              "2     Manhattan                        NaN        NaN        5.0      3.0   \n",
+              "3     Manhattan                Bryant Park       M008        5.0      3.0   \n",
+              "4        Queens  Raymond M. O'Connor Field       Q103       11.0     19.0   \n",
+              "...         ...                        ...        ...        ...      ...   \n",
+              "1830  Manhattan                        NaN        NaN        9.0      7.0   \n",
+              "1831  Manhattan       Ralph J. Bunche Park      M203B        6.0      4.0   \n",
+              "1832  the Bronx          Henry Hudson Park       X080        8.0     11.0   \n",
+              "1833  Manhattan               Battery Park       M005        1.0      1.0   \n",
+              "1834  Manhattan                        NaN        NaN        8.0     10.0   \n",
+              "\n",
+              "      ...                                     architect  \\\n",
+              "0     ...                                           NaN   \n",
+              "1     ...                                           NaN   \n",
+              "2     ...                                           NaN   \n",
+              "3     ...                                           NaN   \n",
+              "4     ...                                           NaN   \n",
+              "...   ...                                           ...   \n",
+              "1830  ...                              Robert A. Bailey   \n",
+              "1831  ...                                           NaN   \n",
+              "1832  ...                                           NaN   \n",
+              "1833  ...  Gehron and Seltzer; Paul Cret Harbeson, FAIA   \n",
+              "1834  ...                                           NaN   \n",
+              "\n",
+              "                                 donor contractor MaintainedByParks  \\\n",
+              "0                           gift. $405        NaN               NaN   \n",
+              "1                                  NaN        NaN               NaN   \n",
+              "2                 Museum of Modern Art        NaN               NaN   \n",
+              "3                             purchase        NaN               NaN   \n",
+              "4                                  NaN        NaN               NaN   \n",
+              "...                                ...        ...               ...   \n",
+              "1830     class of 1910; gutzom borglum        NaN               NaN   \n",
+              "1831                Phelps-Stokes Fund        NaN               Yes   \n",
+              "1832  Gift of Jewish American Congress        NaN               NaN   \n",
+              "1833                               NaN        NaN               Yes   \n",
+              "1834  marble hill honor roll committee        NaN               NaN   \n",
+              "\n",
+              "     Rededication Cost                               Categories inscribed  \\\n",
+              "0             NaN  NaN                                      NaN       NaN   \n",
+              "1             NaN  NaN                                      NaN       NaN   \n",
+              "2             NaN  NaN                                      NaN       NaN   \n",
+              "3             NaN  NaN                                      NaN       NaN   \n",
+              "4             NaN  NaN                War Memorial, World War I       NaN   \n",
+              "...           ...  ...                                      ...       ...   \n",
+              "1830          NaN  NaN                                      NaN       NaN   \n",
+              "1831          NaN  NaN  Sculpture, Public Servant, Civic Leader       NaN   \n",
+              "1832          NaN  NaN          Public Servant, Politcal Figure       NaN   \n",
+              "1833          NaN  NaN               War Memorial, World War II       NaN   \n",
+              "1834          NaN  NaN               War Memorial, World War II       NaN   \n",
+              "\n",
+              "                  X              Y  \n",
+              "0               NaN            NaN  \n",
+              "1               NaN            NaN  \n",
+              "2               NaN            NaN  \n",
+              "3               NaN            NaN  \n",
+              "4               NaN            NaN  \n",
+              "...             ...            ...  \n",
+              "1830            NaN            NaN  \n",
+              "1831  992671.718381  212340.749253  \n",
+              "1832            NaN            NaN  \n",
+              "1833  979858.683639  195090.320499  \n",
+              "1834            NaN            NaN  \n",
+              "\n",
+              "[1835 rows x 31 columns]>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 173
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "install_monument_data.columns"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "kJsFPPIyhUXs",
+        "outputId": "a1e01f61-3659-423d-e611-ddbc3155e71d"
+      },
+      "execution_count": 174,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Index(['name', 'Name2', 'Installation', 'number', 'parkprop', 'borough',\n",
+              "       'parkname', 'parknumber', 'commboard', 'council', 'Location', 'extant',\n",
+              "       'dedicated', 'cast', 'descrip', 'dimen', 'sponsor', 'materials',\n",
+              "       'foundry', 'fabricator', 'sculptor', 'architect', 'donor', 'contractor',\n",
+              "       'MaintainedByParks', 'Rededication', 'Cost', 'Categories', 'inscribed',\n",
+              "       'X', 'Y'],\n",
+              "      dtype='object')"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 174
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "install_monument_data.Installation"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "6qmMWBwHhyqc",
+        "outputId": "f5247960-237d-4e85-c6d3-24afafbfdf0f"
+      },
+      "execution_count": 175,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0      NaN\n",
+              "1      NaN\n",
+              "2      NaN\n",
+              "3      NaN\n",
+              "4      NaN\n",
+              "        ..\n",
+              "1830   NaN\n",
+              "1831   NaN\n",
+              "1832   NaN\n",
+              "1833   NaN\n",
+              "1834   NaN\n",
+              "Name: Installation, Length: 1835, dtype: float64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 175
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "install_monument_data.borough"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "CLHsBIPdh63z",
+        "outputId": "436a0ff0-82d2-4e45-f967-807068f47f8e"
+      },
+      "execution_count": 132,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0          Queens\n",
+              "1       the Bronx\n",
+              "2       Manhattan\n",
+              "3       Manhattan\n",
+              "4          Queens\n",
+              "          ...    \n",
+              "1830    Manhattan\n",
+              "1831    Manhattan\n",
+              "1832    the Bronx\n",
+              "1833    Manhattan\n",
+              "1834    Manhattan\n",
+              "Name: borough, Length: 1835, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 132
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "monument_borough = install_monument_data.borough\n",
+        "\n",
+        "for borough in monument_borough.iteritems():\n",
+        "  borough = borough[1]\n",
+        "\n",
+        "installation_monument = install_monument_data.Installation\n",
+        "\n",
+        "for install in installation_monument.iteritems():\n",
+        "  install = install[1]\n",
+        "\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "DzXzWr-jjAA-"
+      },
+      "execution_count": 141,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "installation = installation_monument.values\n",
+        "installation"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SnBsUCvAlMIE",
+        "outputId": "264c1d38-6f36-4aec-85ee-7efce51f3974"
+      },
+      "execution_count": 142,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([nan, nan, nan, ..., nan, nan, nan])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 142
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(type(installation))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "dltKd6LFln7h",
+        "outputId": "0768f80e-88cc-4ada-8239-cccff012e041"
+      },
+      "execution_count": 143,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'numpy.ndarray'>\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "\n",
+        "installation = np.nan_to_num(installation_monument.values)\n",
+        "installation"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "PeQeKD6xkk4M",
+        "outputId": "81d532ae-903a-4f1a-fe9c-1f3cae307b4a"
+      },
+      "execution_count": 144,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([0., 0., 0., ..., 0., 0., 0.])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 144
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "installation = installation_monument.values \n",
+        "\n",
+        "corrected_mean = [np.nanmean(entry) for entry in installation]\n",
+        "corrected_mean[:10]"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "tQdVACi4mGc-",
+        "outputId": "35d0c5d3-f137-44f2-d7b5-0d5d155d6cfa"
+      },
+      "execution_count": 146,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "<ipython-input-146-0d17a17d1a1f>:3: RuntimeWarning: Mean of empty slice\n",
+            "  corrected_mean = [np.nanmean(entry) for entry in installation]\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[nan, nan, nan, nan, nan, nan, nan, nan, nan, nan]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 146
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#I couldn't figure out the nan from the lack of information about the installation dates, so I went back into OpenRefine and replaced the (blank) with \"0\" because I felt like that number is so far skewed from the rest of the dates that it would just be a placeholder for the dates that arent there."
+      ],
+      "metadata": {
+        "id": "sGeUxjdTqlLI"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "big_data_filepath = '/content/NYC-Parks-Monuments-cleaned-installation.csv'\n",
+        "\n",
+        "install_data = pd.read_csv(big_data_filepath)\n",
+        "\n",
+        "install_data.head"
+      ],
+      "metadata": {
+        "id": "szHZn-FWrUGO"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "monument_data.Installation"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "V6vpfC_rrdyK",
+        "outputId": "4f432945-5a2f-4494-dfd7-398b6f92c955"
+      },
+      "execution_count": 171,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0       NaN\n",
+              "1       NaN\n",
+              "2       NaN\n",
+              "3       NaN\n",
+              "4       NaN\n",
+              "       ... \n",
+              "1873    NaN\n",
+              "1874    NaN\n",
+              "1875    NaN\n",
+              "1876    NaN\n",
+              "1877    NaN\n",
+              "Name: Installation, Length: 1878, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 171
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "install_date = monument_data.Installation\n",
+        "\n",
+        "date_list = []\n",
+        "for date in install_date.iteritems():\n",
+        "  dates = date[1]\n",
+        "\n",
+        "  date_list.append(dates)"
+      ],
+      "metadata": {
+        "id": "ludhNY1tsFVn"
+      },
+      "execution_count": 213,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "date_list"
+      ],
+      "metadata": {
+        "id": "0QILMbeK2qtG"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "names = monument_data.borough\n",
+        "\n",
+        "names_list = []\n",
+        " \n",
+        "for values in names.iteritems():\n",
+        "  names = values[1]\n",
+        "  names_list.append(names)"
+      ],
+      "metadata": {
+        "id": "vVYjQET84yDb"
+      },
+      "execution_count": 223,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "names_list"
+      ],
+      "metadata": {
+        "id": "ODot8FzA5XK6"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from matplotlib import pyplot as plt_boroughs\n",
+        "\n",
+        "plt_boroughs.bar(date_list, names_list)\n",
+        "plt_boroughs.style.use('seaborn')\n",
+        "plt_boroughs.title(\"Density of Monuments in each NYC Borough\")\n",
+        "plt_boroughs.xlabel(\"Names of the Boroughs\")\n",
+        "plt_boroughs.ylabel(\"Number of Monuments\")\n",
+        "plt_boroughs.savefig('Density of Monuments in each NYC Borough.png')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 723
+        },
+        "id": "e9nVtpgz3RFj",
+        "outputId": "2a64fd80-d018-4100-e2d8-9b08b22499c7"
+      },
+      "execution_count": 225,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "TypeError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-225-f56abd45e1cc>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0mmatplotlib\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mpyplot\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0mplt_boroughs\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 3\u001b[0;31m \u001b[0mplt_boroughs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mbar\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdate_list\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mnames_list\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      4\u001b[0m \u001b[0mplt_boroughs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstyle\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0muse\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'seaborn'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0mplt_boroughs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtitle\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Density of Monuments in each NYC Borough\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/pyplot.py\u001b[0m in \u001b[0;36mbar\u001b[0;34m(x, height, width, bottom, align, data, **kwargs)\u001b[0m\n\u001b[1;32m   2405\u001b[0m         \u001b[0mx\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mheight\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mwidth\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m0.8\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mbottom\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mNone\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0malign\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m'center'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2406\u001b[0m         data=None, **kwargs):\n\u001b[0;32m-> 2407\u001b[0;31m     return gca().bar(\n\u001b[0m\u001b[1;32m   2408\u001b[0m         \u001b[0mx\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mheight\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mwidth\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mwidth\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mbottom\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mbottom\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0malign\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0malign\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2409\u001b[0m         **({\"data\": data} if data is not None else {}), **kwargs)\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/__init__.py\u001b[0m in \u001b[0;36minner\u001b[0;34m(ax, data, *args, **kwargs)\u001b[0m\n\u001b[1;32m   1563\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0minner\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0max\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mNone\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1564\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mdata\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1565\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0mfunc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0max\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0mmap\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msanitize_sequence\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0margs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1566\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1567\u001b[0m         \u001b[0mbound\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnew_sig\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mbind\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0max\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/axes/_axes.py\u001b[0m in \u001b[0;36mbar\u001b[0;34m(self, x, height, width, bottom, align, **kwargs)\u001b[0m\n\u001b[1;32m   2315\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2316\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0morientation\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;34m'vertical'\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2317\u001b[0;31m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_process_unit_info\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mxdata\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mx\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mydata\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mheight\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkwargs\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2318\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mlog\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2319\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mset_yscale\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'log'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mnonposy\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m'clip'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/axes/_base.py\u001b[0m in \u001b[0;36m_process_unit_info\u001b[0;34m(self, xdata, ydata, kwargs)\u001b[0m\n\u001b[1;32m   2072\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2073\u001b[0m         \u001b[0mkwargs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_process_single_axis\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mxdata\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mxaxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'xunits'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2074\u001b[0;31m         \u001b[0mkwargs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_process_single_axis\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mydata\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0myaxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'yunits'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2075\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0mkwargs\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2076\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/axes/_base.py\u001b[0m in \u001b[0;36m_process_single_axis\u001b[0;34m(data, axis, unit_name, kwargs)\u001b[0m\n\u001b[1;32m   2054\u001b[0m                 \u001b[0;31m# We only need to update if there is nothing set yet.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2055\u001b[0m                 \u001b[0;32mif\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mhave_units\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2056\u001b[0;31m                     \u001b[0maxis\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mupdate_units\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2057\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2058\u001b[0m             \u001b[0;31m# Check for units in the kwargs, and if present update axis\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/axis.py\u001b[0m in \u001b[0;36mupdate_units\u001b[0;34m(self, data)\u001b[0m\n\u001b[1;32m   1514\u001b[0m         \u001b[0mneednew\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconverter\u001b[0m \u001b[0;34m!=\u001b[0m \u001b[0mconverter\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1515\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconverter\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mconverter\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1516\u001b[0;31m         \u001b[0mdefault\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconverter\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdefault_units\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1517\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mdefault\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0munits\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1518\u001b[0m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mset_units\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdefault\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/category.py\u001b[0m in \u001b[0;36mdefault_units\u001b[0;34m(data, axis)\u001b[0m\n\u001b[1;32m    105\u001b[0m         \u001b[0;31m# the conversion call stack is default_units -> axis_info -> convert\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    106\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0munits\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 107\u001b[0;31m             \u001b[0maxis\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mset_units\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mUnitData\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    108\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    109\u001b[0m             \u001b[0maxis\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0munits\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mupdate\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/category.py\u001b[0m in \u001b[0;36m__init__\u001b[0;34m(self, data)\u001b[0m\n\u001b[1;32m    173\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_counter\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mitertools\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcount\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    174\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mdata\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 175\u001b[0;31m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mupdate\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    176\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    177\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mstaticmethod\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/category.py\u001b[0m in \u001b[0;36mupdate\u001b[0;34m(self, data)\u001b[0m\n\u001b[1;32m    210\u001b[0m         \u001b[0;32mfor\u001b[0m \u001b[0mval\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mOrderedDict\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfromkeys\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    211\u001b[0m             \u001b[0;31m# OrderedDict just iterates over unique values in data.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 212\u001b[0;31m             \u001b[0mcbook\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_check_isinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mbytes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    213\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mconvertible\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    214\u001b[0m                 \u001b[0;31m# this will only be called so long as convertible is True.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.8/dist-packages/matplotlib/cbook/__init__.py\u001b[0m in \u001b[0;36m_check_isinstance\u001b[0;34m(_types, **kwargs)\u001b[0m\n\u001b[1;32m   2121\u001b[0m     \u001b[0;32mfor\u001b[0m \u001b[0mk\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mv\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mkwargs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mitems\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2122\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mv\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtypes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2123\u001b[0;31m             raise TypeError(\n\u001b[0m\u001b[1;32m   2124\u001b[0m                 \"{!r} must be an instance of {}, not a {}\".format(\n\u001b[1;32m   2125\u001b[0m                     \u001b[0mk\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mTypeError\u001b[0m: 'value' must be an instance of str or bytes, not a float"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 576x396 with 1 Axes>"
+            ],
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAegAAAFOCAYAAABNFY7/AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAASXElEQVR4nO3df2hd9f3H8VfaVAUTSgP3TvtDLAUZy1AsnSApdpZ0uOGfYlLUihNF0A2dMLQbRjYTK+j+mPqHyNgfKlqRMPaH2MFQGDVdnWyVRsS2YPAXTWK1GH+Anef7x/iG9mu/uW3dufm0eTz+6um5zX3zxvLMPSc9dlRVVQUAKMqi+R4AAPgmgQaAAgk0ABRIoAGgQAINAAUSaAAo0AkF+u23305/f3+efvrpb5x79dVXc80112RgYCCPP/74f31AAFiIWgb6888/z29/+9tcfvnlxz3/wAMP5NFHH82zzz6bnTt3Zv/+/f/1IQFgoWkZ6LPOOitPPvlkms3mN869++67Wbp0ac4///wsWrQoGzZsyNjYWC2DAsBC0jLQnZ2dOeecc457bmpqKj09PbPHPT09mZqa+u9NBwALVNt/SMyTRQGgtc5v84ebzWamp6dnjw8ePHjcS+FH6+joyNTUp9/mbWmh0ei24zaw5/rZcf3suD0aje6T/jPf6hP0ypUrMzMzk/feey9HjhzJyy+/nL6+vm/zJQGAnMAn6L179+ahhx7K+++/n87OzuzYsSMbN27MypUrs2nTptx///25++67kyQ/+clPsnr16tqHBoAzXcd8/O8mXU6pl0tW7WHP9bPj+tlxe7T9EjcAUA+BBoACCTQAFEigAaBAAg0ABRJoACiQQANAgQQaAAok0ABQIIEGgAIJNAAUSKABoEACDQAFEmgAKJBAA0CBBBoACiTQAFAggQaAAgk0ABRIoAGgQAINAAUSaAAokEADQIEEGgAKJNAAUCCBBoACCTQAFEigAaBAAg0ABRJoACiQQANAgQQaAAok0ABQIIEGgAIJNAAUSKABoEACDQAFEmgAKJBAA0CBBBoACiTQAFAggQaAAgk0ABRIoAGgQAINAAUSaAAokEADQIEEGgAKJNAAUCCBBoACCTQAFKjzRF40MjKSPXv2pKOjI1u3bs3FF188e+6ZZ57Jn//85yxatCjf//7386tf/aq2YQFgoWj5CXr37t2ZmJjI9u3bMzw8nOHh4dlzMzMz+cMf/pBnnnkmzz77bA4cOJB//etftQ4MAAtBy0CPjY2lv78/SbJmzZocPnw4MzMzSZIlS5ZkyZIl+fzzz3PkyJF88cUXWbp0ab0TA8AC0DLQ09PTWbZs2exxT09PpqamkiRnn312br/99vT39+fKK6/MJZdcktWrV9c3LQAsECd0D/poVVXN/npmZiZPPPFEXnrppXR1deXGG2/MW2+9le9+97tzfo1Go/vkJ+Wk2HF72HP97Lh+dlymloFuNpuZnp6ePZ6cnEyj0UiSHDhwIKtWrUpPT0+SZN26ddm7d2/LQE9NffptZqaFRqPbjtvAnutnx/Wz4/Y4lW+CWl7i7uvry44dO5Ik4+PjaTab6erqSpKsWLEiBw4cyJdffpkk2bt3by688MKTHgIAOFbLT9Br165Nb29vBgcH09HRkaGhoYyOjqa7uzubNm3KzTffnC1btmTx4sW59NJLs27dunbMDQBntI7q6JvKbeJySr1csmoPe66fHdfPjtujlkvcAED7CTQAFEigAaBAAg0ABRJoACiQQANAgQQaAAok0ABQIIEGgAIJNAAUSKABoEACDQAFEmgAKJBAA0CBBBoACiTQAFAggQaAAgk0ABRIoAGgQAINAAUSaAAokEADQIEEGgAKJNAAUCCBBoACCTQAFEigAaBAAg0ABRJoACiQQANAgQQaAAok0ABQIIEGgAIJNAAUSKABoEACDQAFEmgAKJBAA0CBBBoACiTQAFAggQaAAgk0ABRIoAGgQAINAAUSaAAokEADQIEEGgAKJNAAUCCBBoACCTQAFEigAaBAnSfyopGRkezZsycdHR3ZunVrLr744tlzH374YX7xi1/kq6++yve+97385je/qW1YAFgoWn6C3r17dyYmJrJ9+/YMDw9neHj4mPPbtm3LT3/607zwwgtZvHhxPvjgg9qGBYCFomWgx8bG0t/fnyRZs2ZNDh8+nJmZmSTJ119/nddffz0bN25MkgwNDWX58uU1jgsAC0PLS9zT09Pp7e2dPe7p6cnU1FS6urpy6NChnHvuuXnwwQczPj6edevW5e677275po1G97ebmpbsuD3suX52XD87LtMJ3YM+WlVVx/z64MGD2bJlS1asWJFbb701r7zySn74wx/O+TWmpj496UE5cY1G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NTWVnp6e454DAE5d58n+gaqqvvWbNhrd3/prMDc7bg97rp8d18+Oy9TyE3Sz2cz09PTs8eTkZBqNxnHPHTx4MM1ms4YxAWBhaRnovr6+7NixI0kyPj6eZrOZrq6uJMnKlSszMzOT9957L0eOHMnLL7+cvr6+eicGgAWgozqBa9YPP/xw/vGPf6SjoyNDQ0N58803093dnU2bNuW1117Lww8/nCT50Y9+lJtvvrn2oQHgTHdCgQYA2suTxACgQAINAAWqNdAeEVq/uXa8a9euXHvttRkcHMy9996br7/+ep6mPL3NteP/9cgjj+SGG25o82Rnjrl2/OGHH2bz5s255pprct99983ThGeGufb8zDPPZGBgIJs3b/7GEyM5cW+//Xb6+/vz9NNPf+PcSXevqsnf//736tZbb62qqqr2799fXXvttcec//GPf1x98MEH1b///e9q8+bN1b59++oa5YzVasebNm2qPvzww6qqqupnP/tZ9corr7R9xtNdqx1XVVXt27evGhgYqK6//vp2j3dGaLXjn//859Vf/vKXqqqq6v7776/ef//9ts94Jphrz59++ml15ZVXVl999VVVVVV10003Vf/85z/nZc7T2WeffVZdf/311a9//evqqaee+sb5k+1ebZ+gPSK0fnPtOElGR0dz3nnnJfnPU94+/vjjeZnzdNZqx0mybdu23HXXXfMx3hlhrh1//fXXef3117Nx48YkydDQUJYvXz5vs57O5trzkiVLsmTJknz++ec5cuRIvvjiiyxdunQ+xz0tnXXWWXnyySeP+zyQU+lebYH2iND6zbXjJLP/Xn1ycjI7d+7Mhg0b2j7j6a7VjkdHR3PZZZdlxYoV8zHeGWGuHR86dCjnnntuHnzwwWzevDmPPPLIfI152ptrz2effXZuv/329Pf358orr8wll1yS1atXz9eop63Ozs6cc845xz13Kt1r2w+JVf41V+2Ot+OPPvoot912W4aGho75y8mpOXrHn3zySUZHR3PTTTfN40RnnqN3XFVVDh48mC1btuTpp5/Om2++mVdeeWX+hjuDHL3nmZmZPPHEE3nppZfy17/+NXv27Mlbb701j9OR1Bhojwit31w7Tv7zl+6WW27JnXfemfXr18/HiKe9uXa8a9euHDp0KNddd13uuOOOjI+PZ2RkZL5GPW3NteNly5Zl+fLlueCCC7J48eJcfvnl2bdv33yNelqba88HDhzIqlWr0tPTk7POOivr1q3L3r1752vUM9KpdK+2QHtEaP3m2nHyn3ujN954Y6644or5GvG0N9eOr7rqqrz44ot5/vnn89hjj6W3tzdbt26dz3FPS3PtuLOzM6tWrco777wze96l11Mz155XrFiRAwcO5Msvv0yS7N27NxdeeOF8jXpGOpXu1fokMY8Ird//t+P169fnBz/4QS699NLZ11599dUZGBiYx2lPT3P9d/y/3nvvvdx777156qmn5nHS09dcO56YmMg999yTqqpy0UUX5f7778+iRR7hcCrm2vNzzz2X0dHRLF68OJdeeml++ctfzve4p529e/fmoYceyvvvv5/Ozs585zvfycaNG7Ny5cpT6p5HfQJAgXwbCgAFEmgAKJBAA0CBBBoACiTQAFAggQaAAgk0ABRIoAGgQP8DUuyMGlhQy6gAAAAASUVORK5CYII=\n"
+          },
+          "metadata": {}
+        }
+      ]
+    }
+  ]
+}
